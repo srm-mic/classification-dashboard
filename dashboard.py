@@ -7,27 +7,41 @@ from PIL import Image
 #command to stop file encoder warning
 st.set_option('deprecation.showfileUploaderEncoding', False)
 
+# Some utils to make things faster 
+@st.cache()
+def read_classes():
+    
+    with open('simple_imagenet_classes.txt') as f:
+        classes = [line.strip() for line in f.readlines()]
+    
+    return classes
+
 #storing models in cache
 @st.cache(allow_output_mutation=True)
 def dnet121():
     densenet121 = models.densenet121(pretrained=True)
     return densenet121
+
 @st.cache(allow_output_mutation=True)
 def dnet161():
     densenet161 = models.densenet161(pretrained=True)
     return densenet161
+
 @st.cache(allow_output_mutation=True)
 def rnet34():
     resnet34 = models.resnet34(pretrained=True)
     return resnet34   
+
 @st.cache(allow_output_mutation=True)
 def rnet50():
     resnet50 = models.resnet50(pretrained=True)
     return resnet50     
+
 @st.cache(allow_output_mutation=True)
 def gnet():
     googlenet = models.googlenet(pretrained=True)
     return googlenet   
+
 @st.cache(allow_output_mutation=True)
 def inetv3():
     inception = models.inception_v3(pretrained=True)
@@ -47,10 +61,12 @@ def name(pred):
 
 #function to show image
 def showimg(x):
-    st.image(x,use_column_width=True)
+    st.image(x, use_column_width=False)
     
 #main function
 def main():
+
+    upl = None 
 
     #title and header
     st.title("Classification Dashboard")
@@ -60,8 +76,8 @@ def main():
     st.subheader("Upload image you want to be classified here")
     upl = st.file_uploader('')
 
-    if st.button("View"):
-       
+    # displaying the image 
+    if upl is not None:
         showimg(upl)
     
     #transforming the image
@@ -77,6 +93,7 @@ def main():
     #choosing the model to classify
     st.subheader("Which classification model do you want to use:")
     modelname = st.selectbox('',['DenseNet121','DenseNet161','GoogLeNet','InceptionNet','ResNet34','ResNet50'])
+    
     if st.button("Classify"):
         img = transform(Image.open(upl))
         img = torch.unsqueeze(img,0)
@@ -100,8 +117,7 @@ def main():
         output = model(img)
 
         #loading ImageNet classes
-        with open('simple_imagenet_classes.txt') as f:
-            classes = [line.strip() for line in f.readlines()]
+        classes = read_classes()
 
         #Classifying
         prob = torch.nn.functional.softmax(output, dim=1)[0] * 100
@@ -111,8 +127,8 @@ def main():
         #Removing numbers and special characters and outputting result
         pred = classes[index[0]]
         predname = name(pred)
-        st.subheader("Your image is classified as **%s** with a probability of **%.2f** using **%s**"%
-            (predname, prob[index[0]], modelname))
+        st.markdown("### Your image is classified as **%s** with a probability of **%.2f** using **%s**"%
+            (predname, prob[index[0]], modelname), unsafe_allow_html=True)
         
     
     
