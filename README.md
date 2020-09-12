@@ -22,7 +22,7 @@ $ streamlit run dashboard.py
 #### Upload a picture, select an architecture and push "Classify"
 ![Tutorial](tutorial.gif "Tutorial")
 ## Note
-#### Weights for all of the architectures are downloaded and may take from 30-100 mb per model. <br>
+#### Weights for all of the architectures are downloaded and may take from 30 to 100 mb per model. <br>
 ## ToDo
 - [ ] Add more possible architectures. 
 - [ ] Deploy on Herouku
