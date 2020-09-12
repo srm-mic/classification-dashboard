@@ -11,7 +11,7 @@ st.set_option('deprecation.showfileUploaderEncoding', False)
 @st.cache()
 def read_classes():
     
-    with open('simple_imagenet_classes.txt') as f:
+    with open('data/simple_imagenet_classes.txt') as f:
         classes = [line.strip() for line in f.readlines()]
     
     return classes
