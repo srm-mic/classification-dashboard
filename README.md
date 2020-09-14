@@ -28,4 +28,4 @@ $ streamlit run dashboard.py
 - [ ] Deploy on Herouku
 - [ ] Work on UI
 
-By: [Aryan Kargwal](https://github.com/aryankargwal) and [Pranjal Datta](https://github.com/pranjaldatta)
+By: [Aryan Kargwal](https://github.com/aryankargwal) 
